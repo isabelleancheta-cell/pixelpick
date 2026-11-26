@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>little chat ♡</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", sans-serif;
+  background: #fceaf2;
+  color: #76566b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.chat-window {
+  width: 100%;
+  max-width: 650px;
+  background: #fffafd;
+  border: 4px solid #f3c6db;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 0 #e8b4cd;
+}
+
+header {
+  text-align: center;
+  border-bottom: 2px dashed #f3c6db;
+  padding-bottom: 15px;
+}
+
+h1 {
+  margin: 5px;
+  color: #d783aa;
+}
+
+.subtitle {
+  font-size: 12px;
+}
+
+.rooms {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.rooms button {
+  background: #fce5f0;
+  color: #a66e8c;
+  border: 2px solid #f3c6db;
+  border-radius: 10px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.rooms button.active {
+  background: #e9a9c9;
+  color: white;
+}
+
+.messages {
+  background: #fff3f8;
+  height: 300px;
+  overflow-y: auto;
+  border: 2px solid #f5d6e5;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.message {
+  background: white;
+  border: 1px solid #f3c6db;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: fit-content;
+  max-width: 85%;
+  overflow-wrap: anywhere;
+}
+
+.message strong {
+  color: #d783aa;
+  display: block;
+  font-size: 12px;
+}
+
+.message p {
+  margin: 5px 0 0;
+}
+
+form {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+input {
+  min-width: 0;
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #f3c6db;
+  border-radius: 10px;
+  outline: none;
+}
+
+button.send {
+  background: #e9a9c9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0 18px;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  font-size: 11px;
+  margin-top: 15px;
+  color: #bd91a9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="chat-window">
+  <header>
+    <h1>♡ little chat ♡</h1>
+    <div class="subtitle">a tiny place to talk with friends!</div>
+  </header>
+
+  <div class="rooms">
+    <button class="active" onclick="changeRoom('A', this)">Room A</button>
+    <button onclick="changeRoom('B', this)">Room B</button>
+    <button onclick="changeRoom('C', this)">Room C</button>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="message">
+      <strong>system ♡</strong>
+      <p>welcome to little chat!</p>
+    </div>
+  </div>
+
+  <form id="chatForm">
+    <input id="username" placeholder="your name" maxlength="20">
+    <input id="messageInput" placeholder="say something..." maxlength="300" required>
+    <button class="send" type="submit">send ♡</button>
+  </form>
+
+  <footer>made with love ♡</footer>
+</div>
+
+<script>
+let currentRoom = "A";
+
+function changeRoom(room, button) {
+  currentRoom = room;
+
+  document.querySelectorAll(".rooms button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+
+  document.getElementById("messages").innerHTML =
+    `<div class="message"><strong>system ♡</strong><p>Welcome to Room ${room}!</p></div>`;
+}
+
+document.getElementById("chatForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("username").value.trim() || "anonymous";
+  const message = document.getElementById("messageInput").value.trim();
+
+  if (!message) return;
+
+  const bubble = document.createElement("div");
+  bubble.className = "message";
+
+  const username = document.createElement("strong");
+  username.textContent = name;
+
+  const text = document.createElement("p");
+  text.textContent = message;
+
+  bubble.appendChild(username);
+  bubble.appendChild(text);
+
+  const area = document.getElementById("messages");
+  area.appendChild(bubble);
+  area.scrollTop = area.scrollHeight;
+
+  document.getElementById("messageInput").value = "";
+});
+</script>
+
+</body>
+</html>
