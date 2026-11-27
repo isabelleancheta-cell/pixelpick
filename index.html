@@ -4,206 +4,334 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>little chat ♡</title>
-
+<title>Pixelpick ♡</title>
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: "Trebuchet MS", sans-serif;
-  background: #fceaf2;
-  color: #76566b;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-}
-
-.chat-window {
-  width: 100%;
-  max-width: 650px;
-  background: #fffafd;
-  border: 4px solid #f3c6db;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 0 #e8b4cd;
-}
-
-header {
-  text-align: center;
-  border-bottom: 2px dashed #f3c6db;
-  padding-bottom: 15px;
-}
-
-h1 {
-  margin: 5px;
-  color: #d783aa;
-}
-
-.subtitle {
-  font-size: 12px;
-}
-
-.rooms {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin: 18px 0;
-}
-
-.rooms button {
-  background: #fce5f0;
-  color: #a66e8c;
-  border: 2px solid #f3c6db;
-  border-radius: 10px;
-  padding: 8px 15px;
-  cursor: pointer;
-}
-
-.rooms button.active {
-  background: #e9a9c9;
-  color: white;
-}
-
-.messages {
-  background: #fff3f8;
-  height: 300px;
-  overflow-y: auto;
-  border: 2px solid #f5d6e5;
-  border-radius: 12px;
-  padding: 15px;
-}
-
-.message {
-  background: white;
-  border: 1px solid #f3c6db;
-  border-radius: 12px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: fit-content;
-  max-width: 85%;
-  overflow-wrap: anywhere;
-}
-
-.message strong {
-  color: #d783aa;
-  display: block;
-  font-size: 12px;
-}
-
-.message p {
-  margin: 5px 0 0;
-}
-
-form {
-  display: flex;
-  gap: 8px;
-  margin-top: 15px;
-}
-
-input {
-  min-width: 0;
-  flex: 1;
-  padding: 12px;
-  border: 2px solid #f3c6db;
-  border-radius: 10px;
-  outline: none;
-}
-
-button.send {
-  background: #e9a9c9;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 0 18px;
-  cursor: pointer;
-}
-
-footer {
-  text-align: center;
-  font-size: 11px;
-  margin-top: 15px;
-  color: #bd91a9;
-}
+  :root {
+    --lavender: #dcd2ff;
+    --purple: #8b78c9;
+    --dark: #51476c;
+    --pink: #ffe0ed;
+    --yellow: #fff0a8;
+    --paper: #fffdfd;
+    --line: #75698d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; padding: 24px 14px;
+    background: #eee9ff; color: var(--dark);
+    font-family: "Trebuchet MS", Verdana, sans-serif;
+    background-image: radial-gradient(#d5cafa 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button {
+    border: 1.5px solid var(--line); background: white; border-radius: 7px;
+    padding: 8px 11px; cursor: pointer; box-shadow: 2px 2px 0 #c5b9e9;
+  }
+  button:hover { transform: translateY(-1px); background: #faf7ff; }
+  button:active { transform: translate(1px,1px); box-shadow: none; }
+  input {
+    min-width: 0; border: 1.5px solid #b8acd8; border-radius: 6px;
+    background: white; padding: 10px;
+  }
+  .app {
+    width: min(820px, 100%); margin: 0 auto; background: var(--paper);
+    border: 2px solid var(--line); border-radius: 12px;
+    box-shadow: 7px 7px 0 #c8bce9; overflow: hidden;
+  }
+  header {
+    padding: 14px 18px; background: var(--lavender);
+    border-bottom: 2px solid var(--line); display: flex;
+    align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .logo { font-size: 21px; font-weight: 900; letter-spacing: 1px; }
+  .tiny { font-size: 12px; opacity: .8; }
+  main { padding: 16px; }
+  .profilebar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: #faf8ff; border: 1px solid #d8d0eb; border-radius: 8px;
+    padding: 10px; margin-bottom: 14px;
+  }
+  .pfp {
+    width: 42px; height: 42px; border-radius: 8px; object-fit: cover;
+    border: 1.5px solid var(--line); background: var(--pink);
+    display: grid; place-items: center; font-size: 20px;
+  }
+  .profile-fields { flex: 1; min-width: 150px; display: grid; gap: 5px; }
+  .profile-fields input { padding: 6px 8px; }
+  .statusrow { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+  .statusrow input { flex: 1; min-width: 120px; padding: 6px 8px; }
+  .roomtools {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+    padding: 10px; background: #fff8fb; border: 1px solid #f0d7e3; border-radius: 8px;
+  }
+  .roomtools input { flex: 1; min-width: 130px; }
+  .roomname {
+    background: var(--pink); border: 1.5px solid var(--line); border-radius: 8px;
+    padding: 11px 13px; font-weight: bold; margin-bottom: 10px;
+  }
+  .messages {
+    height: min(48vh, 390px); min-height: 230px; overflow-y: auto;
+    border: 1.5px solid var(--line); border-radius: 8px;
+    background: #fff; padding: 12px;
+    background-image: linear-gradient(#f8f5ff 1px, transparent 1px);
+    background-size: 100% 25px;
+  }
+  .welcome { text-align: center; opacity: .65; padding: 50px 12px; font-size: 13px; }
+  .message { display: flex; gap: 8px; margin: 0 0 12px; align-items: flex-start; }
+  .message img, .miniavatar {
+    width: 29px; height: 29px; flex: 0 0 29px; object-fit: cover;
+    border: 1px solid #9c8dbd; border-radius: 6px; background: var(--pink);
+  }
+  .miniavatar { display: grid; place-items: center; font-size: 14px; }
+  .bubble { min-width: 0; background: #f4f0ff; border: 1px solid #d1c5ed;
+    border-radius: 2px 9px 9px 9px; padding: 7px 9px; overflow-wrap: anywhere; }
+  .meta { font-size: 11px; margin-bottom: 3px; color: #796d91; }
+  .composer { display: flex; gap: 7px; margin-top: 10px; align-items: stretch; }
+  .composer input { flex: 1; }
+  .emoji-btn { background: var(--yellow); min-width: 42px; font-size: 18px; }
+  .send-btn { background: var(--lavender); font-weight: bold; min-width: 54px; }
+  .picker {
+    display: none; margin-top: 8px; padding: 10px; border: 1px solid #d2c6ec;
+    border-radius: 8px; background: #fbf9ff;
+  }
+  .picker.open { display: block; }
+  .tabs { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 9px; }
+  .tabs button { font-size: 12px; padding: 6px 8px; }
+  .tabs button.active { background: var(--pink); }
+  .faces { display: flex; flex-wrap: wrap; gap: 6px; }
+  .faces button { box-shadow: none; background: white; }
+  .footnote { font-size: 11px; opacity: .7; text-align: center; padding: 12px 8px 2px; }
+  .hidden { display: none !important; }
+  @media (max-width: 520px) {
+    body { padding: 10px 7px; }
+    main { padding: 11px; }
+    header { padding: 12px; }
+    .composer { gap: 5px; }
+  }
 </style>
 </head>
-
 <body>
-
-<div class="chat-window">
+<div class="app">
   <header>
-    <h1>♡ little chat ♡</h1>
-    <div class="subtitle">a tiny place to talk with friends!</div>
-  </header>
-
-  <div class="rooms">
-    <button class="active" onclick="changeRoom('A', this)">Room A</button>
-    <button onclick="changeRoom('B', this)">Room B</button>
-    <button onclick="changeRoom('C', this)">Room C</button>
-  </div>
-
-  <div class="messages" id="messages">
-    <div class="message">
-      <strong>system ♡</strong>
-      <p>welcome to little chat!</p>
+    <div>
+      <div class="logo">pixelpick <span aria-hidden="true">♡</span></div>
+      <div class="tiny">a tiny place to chat</div>
     </div>
-  </div>
+    <div class="tiny">✦ hello there! ✦</div>
+  </header>
+  <main>
+    <section class="profilebar">
+      <img id="myAvatar" class="pfp hidden" alt="Your profile picture">
+      <div id="avatarFallback" class="pfp">♡</div>
+      <div class="profile-fields">
+        <input id="displayName" maxlength="24" placeholder="Your nickname" aria-label="Your nickname">
+        <div class="statusrow">
+          <select id="status" aria-label="Your status">
+            <option value="online">● online</option>
+            <option value="away">◷ away</option>
+            <option value="busy">☾ do not disturb</option>
+            <option value="offline">○ offline</option>
+          </select>
+          <input id="customStatus" maxlength="60" placeholder="Your status message..." aria-label="Custom status">
+        </div>
+      </div>
+      <label>
+        <input id="avatarUpload" type="file" accept="image/*" class="hidden">
+        <button type="button" id="uploadButton">Add picture</button>
+      </label>
+    </section>
 
-  <form id="chatForm">
-    <input id="username" placeholder="your name" maxlength="20">
-    <input id="messageInput" placeholder="say something..." maxlength="300" required>
-    <button class="send" type="submit">send ♡</button>
-  </form>
+    <section class="roomtools">
+      <input id="roomInput" maxlength="40" placeholder="Room name or room code">
+      <button id="createRoom">＋ Create room</button>
+      <button id="joinRoom">Join room</button>
+      <button id="copyInvite">Copy room link</button>
+    </section>
 
-  <footer>made with love ♡</footer>
+    <div class="roomname" id="roomTitle">♡ Lobby</div>
+    <section class="messages" id="messages" aria-live="polite">
+      <div class="welcome">welcome to pixelpick!<br>create a room or send a little message ♡</div>
+    </section>
+
+    <form class="composer" id="messageForm">
+      <button type="button" class="emoji-btn" id="emojiToggle" aria-label="Open kaomoji picker">☺</button>
+      <input id="messageInput" maxlength="500" autocomplete="off" placeholder="type something..." aria-label="Message">
+      <button class="send-btn" type="submit">➤</button>
+    </form>
+
+    <section class="picker" id="picker">
+      <div class="tabs" id="categoryTabs"></div>
+      <div class="faces" id="kaomojiList"></div>
+    </section>
+    <div class="footnote">made with ♡ · messages are saved only in this browser</div>
+  </main>
 </div>
-
 <script>
-let currentRoom = "A";
+(() => {
+  const $ = id => document.getElementById(id);
+  const KEY = "pixelpick_local_v1";
+  const categories = {
+    Happy: ["(˶ᵔ ᵕ ᵔ˶)", "(๑˃ᴗ˂)ﻭ", "٩(ˊᗜˋ*)و", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧"],
+    Sad: ["(｡•́︿•̀｡)", "(╥﹏╥)", "(っ- ‸ - ς)", "(ಥ﹏ಥ)"],
+    Love: ["( ˘ ³˘)♥", "(♡˙︶˙♡)", "♡(˃͈ દ ˂͈ ༶ )", "(´｡• ᵕ •｡`) ♡"],
+    Cute: ["૮ ˶ᵔ ᵕ ᵔ˶ ა", "(｡･ω･｡)", "૮₍ ˶ᵔ ᵕ ᵔ˶ ₎ა", "(๑>ᴗ<๑)"],
+    Angry: ["(＃`Д´)", "(눈_눈)", "(¬_¬ )", "٩(╬ʘ益ʘ╬)۶"],
+    Shocked: ["( ˶°ㅁ°) !!", "(๑°o°๑)", "Σ(°△°||| )", "(⊙_⊙)", "(°ロ°) !", "w(°ｏ°)w", "(ﾟдﾟ)", "ヽ(°〇°)ﾉ", "( ˶°□°) !!"],
+    Confused: ["( ꩜ ᯅ ꩜;)⁭ ⁭", "∘ ∘ ∘ ( °ヮ° ) ?", "(o_O)?", "(・・?)", "(๑•̌.•̑๑)?", "(°_o)", "(￢_￢)?", "(・・;)ゞ", "(⊙.☉)?", "(•᷄ࡇ•᷅)?"],
+    Other: ["(￣▽￣)", "¯\\_(ツ)_/¯", "(づ｡◕‿‿◕｡)づ", "♪(´▽｀)"]
+  };
 
-function changeRoom(room, button) {
-  currentRoom = room;
+  let data;
+  try { data = JSON.parse(localStorage.getItem(KEY)) || {}; } catch { data = {}; }
+  data.rooms ||= {};
+  data.profile ||= { name: "guest", status: "online", custom: "", avatar: "" };
+  let currentRoom = new URLSearchParams(location.search).get("room") || "lobby";
+  let activeCategory = "Happy";
 
-  document.querySelectorAll(".rooms button")
-    .forEach(btn => btn.classList.remove("active"));
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(data)); }
+    catch { alert("Browser storage is full. Try using a smaller profile picture."); }
+  }
+  function ensureRoom(id, name) {
+    if (!data.rooms[id]) data.rooms[id] = { name: name || (id === "lobby" ? "Lobby" : "Room"), messages: [] };
+    return data.rooms[id];
+  }
+  function safeText(value) { return String(value).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c])); }
+  function roomUrl(id) {
+    const url = new URL(location.href);
+    url.searchParams.set("room", id);
+    return url.toString();
+  }
+  function renderProfile() {
+    $("displayName").value = data.profile.name || "";
+    $("status").value = data.profile.status || "online";
+    $("customStatus").value = data.profile.custom || "";
+    if (data.profile.avatar) {
+      $("myAvatar").src = data.profile.avatar;
+      $("myAvatar").classList.remove("hidden");
+      $("avatarFallback").classList.add("hidden");
+    } else {
+      $("myAvatar").classList.add("hidden");
+      $("avatarFallback").classList.remove("hidden");
+    }
+  }
+  function renderMessages() {
+    const room = ensureRoom(currentRoom);
+    $("roomTitle").textContent = "♡ " + room.name;
+    const box = $("messages");
+    if (!room.messages.length) {
+      box.innerHTML = '<div class="welcome">nothing here yet...<br>start the conversation ♡</div>';
+      return;
+    }
+    box.innerHTML = room.messages.map(m => `
+      <article class="message">
+        ${m.avatar ? `<img src="${m.avatar}" alt="">` : '<div class="miniavatar">♡</div>'}
+        <div class="bubble">
+          <div class="meta">${safeText(m.name)} · ${safeText(m.time)}</div>
+          <div>${safeText(m.text).replace(/\n/g, "<br>")}</div>
+        </div>
+      </article>`).join("");
+    box.scrollTop = box.scrollHeight;
+  }
+  function switchRoom(id, name) {
+    currentRoom = id;
+    ensureRoom(id, name);
+    const url = new URL(location.href);
+    url.searchParams.set("room", id);
+    history.replaceState({}, "", url);
+    renderMessages();
+  }
+  $("createRoom").addEventListener("click", () => {
+    const name = $("roomInput").value.trim();
+    if (!name) { alert("Give your room a name first!"); return; }
+    const id = Math.random().toString(36).slice(2, 9);
+    ensureRoom(id, name);
+    $("roomInput").value = "";
+    switchRoom(id, name);
+  });
+  $("joinRoom").addEventListener("click", () => {
+    const raw = $("roomInput").value.trim();
+    if (!raw) { alert("Enter a room code first!"); return; }
+    const id = raw.includes("room=") ? new URL(raw, location.href).searchParams.get("room") : raw;
+    if (!id) { alert("That room link doesn't look right."); return; }
+    switchRoom(id, data.rooms[id]?.name || "Joined room");
+    $("roomInput").value = "";
+  });
+  $("copyInvite").addEventListener("click", async () => {
+    const link = roomUrl(currentRoom);
+    try { await navigator.clipboard.writeText(link); alert("Room link copied!"); }
+    catch { prompt("Copy this room link:", link); }
+  });
+  $("messageForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const text = $("messageInput").value.trim();
+    if (!text) return;
+    const room = ensureRoom(currentRoom);
+    room.messages.push({
+      name: data.profile.name || "guest",
+      avatar: data.profile.avatar || "",
+      text,
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    });
+    save();
+    $("messageInput").value = "";
+    renderMessages();
+  });
+  $("displayName").addEventListener("change", e => { data.profile.name = e.target.value.trim() || "guest"; save(); });
+  $("status").addEventListener("change", e => { data.profile.status = e.target.value; save(); });
+  $("customStatus").addEventListener("change", e => { data.profile.custom = e.target.value.trim(); save(); });
+  $("uploadButton").addEventListener("click", () => $("avatarUpload").click());
+  $("avatarUpload").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { alert("Please choose an image."); return; }
+    if (file.size > 700 * 1024) { alert("Please choose an image smaller than 700 KB."); return; }
+    const reader = new FileReader();
+    reader.onload = () => { data.profile.avatar = reader.result; save(); renderProfile(); };
+    reader.readAsDataURL(file);
+  });
+  function renderPicker() {
+    $("categoryTabs").innerHTML = Object.keys(categories).map(cat =>
+      `<button type="button" data-cat="${cat}" class="${cat === activeCategory ? "active" : ""}">${cat}</button>`
+    ).join("");
+    $("kaomojiList").innerHTML = categories[activeCategory].map(face =>
+      `<button type="button" data-face="${safeText(face)}">${safeText(face)}</button>`
+    ).join("");
+  }
+  $("categoryTabs").addEventListener("click", e => {
+    const b = e.target.closest("[data-cat]");
+    if (!b) return;
+    activeCategory = b.dataset.cat;
+    renderPicker();
+  });
+  $("kaomojiList").addEventListener("click", e => {
+    const b = e.target.closest("[data-face]");
+    if (!b) return;
+    const input = $("messageInput");
+    const start = input.selectionStart, end = input.selectionEnd;
+    input.value = input.value.slice(0, start) + b.dataset.face + input.value.slice(end);
+    input.focus();
+    input.setSelectionRange(start + b.dataset.face.length, start + b.dataset.face.length);
+  });
+  $("emojiToggle").addEventListener("click", () => {
+    $("picker").classList.toggle("open");
+    renderPicker();
+  });
+  window.addEventListener("storage", e => {
+    if (e.key === KEY) {
+      try { data = JSON.parse(e.newValue) || data; renderMessages(); renderProfile(); }
+      catch {}
+    }
+  });
 
-  button.classList.add("active");
-
-  document.getElementById("messages").innerHTML =
-    `<div class="message"><strong>system ♡</strong><p>Welcome to Room ${room}!</p></div>`;
-}
-
-document.getElementById("chatForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const name = document.getElementById("username").value.trim() || "anonymous";
-  const message = document.getElementById("messageInput").value.trim();
-
-  if (!message) return;
-
-  const bubble = document.createElement("div");
-  bubble.className = "message";
-
-  const username = document.createElement("strong");
-  username.textContent = name;
-
-  const text = document.createElement("p");
-  text.textContent = message;
-
-  bubble.appendChild(username);
-  bubble.appendChild(text);
-
-  const area = document.getElementById("messages");
-  area.appendChild(bubble);
-  area.scrollTop = area.scrollHeight;
-
-  document.getElementById("messageInput").value = "";
-});
+  ensureRoom("lobby", "Lobby");
+  if (!data.rooms[currentRoom]) ensureRoom(currentRoom, "Shared room");
+  renderProfile();
+  renderPicker();
+  renderMessages();
+  save();
+})();
 </script>
-
 </body>
 </html>
